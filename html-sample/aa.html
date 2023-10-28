@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>전라남도 지도</title>
+    <meta charset="utf-8" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>전라남도 지도</h1>
+    <div id="map"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.3.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+
+    <script>
+        var mymap = L.map('map').setView([37.5665, 126.9780], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(mymap);
+
+        var featureData; // Store feature data globally
+
+        // Load data from Seoul_Gu.json
+        fetch('Seoul_Gu.json')
+            .then(response => response.json())
+            .then(data => {
+                featureData = data; // Store the data globally for later use
+                L.geoJSON(data, {
+                    style: function (feature) {
+                        return { color: 'red' }; // Customize the polygon style here
+                    }
+                }).addTo(mymap);
+            });
+
+        var markers = [];
+
+        mymap.on('move', function (e) {
+            var center = mymap.getCenter();
+            var zoomLevel = mymap.getZoom();
+
+            console.log("현재 보고 있는 위치의 좌표: 위도 " + center.lat + ", 경도 " + center.lng);
+            getVisibleLocations(center.lat, center.lng);
+            console.log("맵의 현재 줌 레벨: " + zoomLevel);
+
+            // Clear previous markers
+            markers.forEach(marker => mymap.removeLayer(marker));
+
+            // Add a new marker for the current location
+            var marker = L.marker([center.lat, center.lng], { icon: blueIcon }).addTo(mymap);
+            markers.push(marker);
+        });
+
+        function getVisibleLocations(lat, lng) {
+            if (!featureData) return;
+
+            var visibleLocations = [];
+            for (var i = 0; i < featureData.features.length; i++) {
+                var polygon = turf.polygon(featureData.features[i].geometry.coordinates);
+                if (turf.booleanPointInPolygon([lng, lat], polygon)) {
+                    visibleLocations.push(featureData.features[i].properties.SIG_ENG_NM);
+                }
+            }
+
+            if (visibleLocations.length > 0) {
+                console.log("현재 보고 있는 곳의 시/동: " + visibleLocations.join(", "));
+            }
+        }
+
+        var blueIcon = new L.Icon({
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+    </script>
+</body>
+
+</html>
