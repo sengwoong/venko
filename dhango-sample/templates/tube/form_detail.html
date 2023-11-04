@@ -60,6 +60,34 @@
         <p>작성자: {{ post.author }}</p>
         <p>작성일: {{ post.created_at }}</p>
         <p>조회수: {{ post.view_count }}</p>
+        <div class="comments-section">
+            <h3>커맨드보기</h3>
+            <ul class="comments-list">
+                <ul class="comments-list">
+                    {% for content in post.postcontents.all %}
+                        <li>Order: {{ content.order }}</li>
+                        {% if content.file_upload %}
+                            <li>파일 업로드: <img src="{{ content.file_upload.url }}" alt="{{ content.file_upload.name }}"> </li>
+                        {% endif %}
+                        {% if content.content %}
+                            <li>내용: {{ content.content }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                
+            </ul>
+            
+        </div>
+        <div class="new-comment-section">
+            <h3>커맨드작성</h3>
+            <form class="comment-form" action="{% url 'tube:add_post' post.pk %}" method="post">
+                {% csrf_token %}
+                {{ content_form.as_p }}
+                <input type="hidden" name="redirect_url" value="creat">
+                <input class="submit-btn" type="submit" value=" 컨텐츠작성">
+            </form>
+        </div>
+        
         {% if post.file_upload %}
             <video src="{{ post.file_upload.url }}" controls></video>
         {% endif %}
@@ -70,58 +98,32 @@
             <h3>태그</h3>
             <ul class="tags-list">
                 {% for tag in post.tags.all %}
-         
-            
-                    <li>{{ tag }}  </li>
-                    <form class="delete-tag-form" action="{% url 'tube:tag_delete' post.pk tag.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="redirect_url" value="detail">
-                        <input type="submit" class="delete-tag-btn" value="삭제">
-                    </form>
-                    
-
-   
-
-                {% endfor %}
+                <li>{{ tag }}  <form class="delete-tag-form" action="{% url 'tube:tag_delete' post.pk tag.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="redirect_url" value="creat">
+                    <input type="submit" class="delete-tag-btn" value="삭제">
+                </form></li>
+            {% endfor %}
             </ul>
         </div>
         <div class="add-tag-section">
             <h3>태그 추가</h3>
-            <form class="tag-form" action="{% url 'tube:add_tag' post.pk %}" method="post">
+            <form class="tag-form" action="{% url 'tube:add_tag' post.pk  %}" method="post">
                 {% csrf_token %}
                 <label for="tag_name">태그 이름:</label>
                 <input type="text" id="tag_name" name="tag_name">
-                <input type="hidden" id="redirect_url" name="redirect_url" value="detail"> 
+                <input type="hidden" id="redirect_url" name="redirect_url" value="creat"> 
                 <input class="submit-btn" type="submit" value="추가">
             </form>
         </div>
-        
-        <div class="comments-section">
-            <h3>댓글</h3>
-            <ul class="comments-list">
-                {% for comment in post.comments.all %}
-                    <li>{{ comment.message }}</li>
-                    <p>작성자: {{ comment.author }}</p>
-                    <p>작성일: {{ comment.updated_at }}</p>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="new-comment-section">
-            <h3>댓글 작성</h3>
-            <form class="comment-form" action="{% url 'tube:comment_new' post.pk %}" method="post">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <input class="submit-btn" type="submit" value="댓글 작성">
-            </form>
-        </div>
+      
     </div>
     <div class="navigation-links">
         <a class="link" href="{% url 'tube:post_list' %}">목록</a>
         {% if user == post.author %}
-            <a class="link" href="{% url 'tube:post_edit' post.pk %}">수정</a>
+          
             <a class="link" href="{% url 'tube:post_delete' post.pk %}">삭제</a>
         {% endif %}
     </div>
 </body>
-
 </html>

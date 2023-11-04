@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView 
 from .models import Post, Comment,Tag , PostContent
 from .forms import PostForm, CommentForm ,TagForm,PostContent,PostContentForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy , reverse
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
@@ -31,17 +31,44 @@ class PostListView(ListView):
 
 post_list = PostListView.as_view()
 
-from django.shortcuts import redirect
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    success_url = reverse_lazy('tube:post_list')
     template_name = 'tube/form.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post_form'] = PostForm()
+        return context
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        return redirect(reverse('tube:post_create_detail', kwargs={'pk': post.pk}))
+
+post_createView = PostCreateView.as_view()
+
+
+class PostCreateDetailView(LoginRequiredMixin, DetailView):
+    model = Post
+    form_class = PostForm
+    success_url = reverse_lazy('tube:post_list')
+    template_name = 'tube/form_detail.html'
+
+
+    
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        try:
+            post = Post.objects.get(pk=pk)
+            return post
+        except Post.DoesNotExist:
+            raise Http404("Post does not exist")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['tag_form'] = TagForm()
         context['content_form'] = PostContentForm()
         return context
@@ -49,40 +76,23 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.author = self.request.user
-        print("post.__dict__")
-        print("post.__dict__")
-
-        print(post.__dict__)
-        print("post.__dict__")
         post.save()
 
         tag_form = TagForm(self.request.POST)
-        print(tag_form)
         if tag_form.is_valid():
             tag = tag_form.save(commit=False)
             tag.post = post
-            print("tag")
-            print(tag.__dict__)
-            print("tag")
             tag.save()
 
         comment_form = PostContentForm(self.request.POST)
-        print(comment_form)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
-            print("comment.__dict__")
-            print("comment.__dict__")
-            print(comment.__dict__)
             comment.save()
-
 
         return redirect(self.success_url)
 
-post_createView = PostCreateView.as_view()
-
-
-
+post_create_detailView = PostCreateDetailView.as_view()
 
 
 class PostDetailView(DetailView):
@@ -99,17 +109,9 @@ class PostDetailView(DetailView):
     
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-
         try:
             post = Post.objects.get(pk=pk)
 
-            # comments = post.comments.all()  
-            comments = post.posttags.all()  
-            print("comments")
-# posttags
-# postcontents
-            print(comments)
-            print("comments")
             # view_count를 증가시키고 저장합니다.
             post.view_count += 1
             post.save()
@@ -174,3 +176,55 @@ def comment_new(request, pk):
     return render(request, 'tube/form.html', {
         'form': form,
     })
+@login_required
+def add_tag(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        tag_name = request.POST.get('tag_name')
+        if not post.tags.filter(tag_name=tag_name).exists(): 
+            post.tags.create(tag_name=tag_name, post=post)
+        url = request.POST.get('redirect_url')
+        if url == "creat":  # 수정된 부분
+            return redirect('tube:post_create_detail', pk)
+        elif url == "detail":  # 수정된 부분
+            return redirect('tube:post_detail', pk)
+    return HttpResponse("Some default response")
+
+@login_required
+def delete_tag(request, pk, tag_id):
+    post = Post.objects.get(pk=pk)
+    tag = post.tags.get(pk=tag_id)
+
+    if request.method == 'POST':
+        tag.delete()
+
+        url = request.POST.get('redirect_url')
+        print(url)
+        if url == "creat":
+            return redirect('tube:post_create_detail', pk)
+        elif url == "detail":
+            return redirect('tube:post_detail', pk)
+    return HttpResponse("Some default response")
+
+
+@login_required
+def add_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = PostContentForm(request.POST)
+
+        url = request.POST.get('redirect_url')
+        print("url")
+        print(url)
+        if form.is_valid():
+            print("valid")
+            comment = form.save(commit=False) # commit=False는 DB에 저장하지 않고 객체만 반환
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+        if url == "creat":  # 수정된 부분
+            return redirect('tube:post_create_detail', pk)
+        elif url == "detail":  # 수정된 부분
+            return redirect('tube:post_create_detail', pk)
+
+    return HttpResponse("Some default response")
