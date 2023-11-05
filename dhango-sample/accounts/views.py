@@ -1,15 +1,19 @@
-from django.shortcuts import render
+from django.urls import reverse_lazy
+from .models import CustomUser
 
+from django.shortcuts import render
+from django.shortcuts import redirect
 # accounts > views.py
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
-from django.views.generic import CreateView
-from .forms import CustomUserCreationForm
+from django.views.generic import CreateView,UpdateView
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login
-
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 signup = CreateView.as_view(
     form_class=CustomUserCreationForm,  # 커스텀 폼으로 변경
     template_name='accounts/form.html',
@@ -17,7 +21,6 @@ signup = CreateView.as_view(
 )
 
 
-from django.contrib.auth import authenticate, login
 
 class CustomLoginView(LoginView):
     authentication_form = AuthenticationForm
@@ -59,3 +62,27 @@ def profile(request):
 
 
 
+
+
+class ProfileUpdateView(UpdateView):
+    model = CustomUser
+    form_class = CustomUserChangeForm
+    template_name = 'accounts/edit_profile.html'
+    success_url = reverse_lazy('accounts:profile')# Change 'profile' to your profile view name
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+post_file_update = ProfileUpdateView.as_view()
+
+def change_password(request):
+    success_url = reverse_lazy('accounts:profile')
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important! to update the user's session
+            return redirect(success_url)  # Redirect to the profile page after changing the password
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/change_password.html', {'form': form})

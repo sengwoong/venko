@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser,BaseUserManager
 
 class CustomUserManager(BaseUserManager):
     pass
+app_name = 'accounts'
 
 class CustomUser(AbstractUser):
     # Define additional fields

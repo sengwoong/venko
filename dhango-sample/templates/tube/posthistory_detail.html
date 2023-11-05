@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .post-detail {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tags-list,
+        .comments-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .navigation-links {
+            margin-top: 20px;
+        }
+
+        .link {
+            display: inline-block;
+            margin-right: 20px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .comment-form {
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .blog-section,
+        .new-blog-section {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-detail">
+        <h1>{{ object.title }}</h1>
+        <p>작성자: {{ object.author.username }}</p>
+        <p>작성일: {{ object.created_at }}</p>
+        <p>조회수: {{ object.view_count }}</p>
+      
+        <!-- ... previous HTML content ... -->
+        <div class="blog-section">
+            <h3>게시물보기</h3>
+            <ul class="blog-list">
+                {% for content in post_contents_list %}
+                    <li>Order: {{ content.order }}, 내용: {{ content.content }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+
+<div class="tags-section">
+    <h3>태그</h3>
+    <ul class="tags-list">
+        {% for tag in tags_list %}
+            <li>{{ tag }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- ... rest of the HTML content ... -->
+
+
+        <div class="comments-section">
+            <h3>댓글</h3>
+            <ul class="comments-list">
+                {% for comment in object.post_comments.all %}
+                    <li>{{ comment.message }}</li>
+                    <p>작성자: {{ comment.author.username }}</p>
+                    <p>작성일: {{ comment.updated_at }}</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="navigation-links">
+        <a class="link" href="{% url 'tube:post_list' %}">목록</a>
+        {% if user == object.author %}
+        <a class="link" href="{% url 'tube:post_delete_history' object.pk %}">삭제</a>
+    {% endif %}
+    
+   
+    </div>
+</body>
+</html>

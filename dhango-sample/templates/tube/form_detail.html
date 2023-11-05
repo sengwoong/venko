@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +13,6 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
-
         .post-detail {
             background-color: #fff;
             padding: 20px;
@@ -34,6 +35,13 @@
             margin-right: 20px;
             text-decoration: none;
             color: #000;
+        }
+
+        .blog-section,
+        .new-blog-section {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .comment-form {
@@ -62,38 +70,53 @@
         <p>조회수: {{ post.view_count }}</p>
         <div class="comments-section">
             <h3>커맨드보기</h3>
-            <ul class="comments-list">
-                <ul class="comments-list">
-                    {% for content in post.postcontents.all %}
-                        <li>Order: {{ content.order }}</li>
-                        {% if content.file_upload %}
-                            <li>파일 업로드: <img src="{{ content.file_upload.url }}" alt="{{ content.file_upload.name }}"> </li>
-                        {% endif %}
-                        {% if content.content %}
-                            <li>내용: {{ content.content }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-                
+            <ul class="blog-list">
+                {% for content in post.postcontents.all %}
+                <!-- form for editing content -->
+                <li id="content_edit_{{ content.order }}">
+                    <!-- button to toggle form display -->
+                    <button onclick="toggleForm('{{ content.id }}')">수정보이기</button>
+                    <div id="form-{{ content.id }}" style="display: none;">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'tube:post_edit' pk=post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="content_id" value="{{ content.id }}">
+                            {% if content.file_upload %}
+                                <!-- display file upload -->
+                                <img src="{{ content.file_upload.url }}" alt="{{ content.file_upload.name }}">
+                                <input type="file" name="file_upload">
+                            {% endif %}
+                            {% if content.content %}
+                                <!-- display existing content for editing -->
+                                <textarea name="new_content">{{ content.content }}</textarea>
+                            {% endif %}
+                            <input type="submit" value="수정">
+                        </form>
+                        <form method="post" action="{% url 'tube:content_delete' pk=post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="content_id" value="{{ content.id }}">
+                            <input type="submit" value="삭제">
+                        </form>
+
+                    </div>
+                    <div name="content">content: {{ content.content }}</div>
+                    <div name="content">order: {{ content.order }}</div>
+                </li>
+            {% endfor %}
+                <div class="new-comment-section">
+                    <h3>커맨드작성</h3>
+                    <form class="comment-form" action="{% url 'tube:add_post' post.pk %}" method="post">
+                        {% csrf_token %}
+                        {{ content_form.as_p }}
+                        <input type="hidden" name="redirect_url" value="creat">
+                        <input class="submit-btn" type="submit" value="컨텐츠작성">
+                    </form>
+                </div>
             </ul>
-            
-        </div>
-        <div class="new-comment-section">
-            <h3>커맨드작성</h3>
-            <form class="comment-form" action="{% url 'tube:add_post' post.pk %}" method="post">
-                {% csrf_token %}
-                {{ content_form.as_p }}
-                <input type="hidden" name="redirect_url" value="creat">
-                <input class="submit-btn" type="submit" value=" 컨텐츠작성">
-            </form>
-        </div>
+     
         
-        {% if post.file_upload %}
-            <video src="{{ post.file_upload.url }}" controls></video>
-        {% endif %}
-        {% if post.thumb_image %}
-            <img src="{{ post.thumb_image.url }}" controls></img>
-        {% endif %}
+
+            </ul>
+        </div>
         <div class="tags-section">
             <h3>태그</h3>
             <ul class="tags-list">
@@ -116,14 +139,25 @@
                 <input class="submit-btn" type="submit" value="추가">
             </form>
         </div>
-      
+        
+
+        <div class="navigation-links">
+            <a class="link" href="{% url 'tube:post_detail' post.pk %}">상세페이지</a>
+            <a class="link" href="{% url 'tube:post_list' %}">목록</a>
+        </div>
     </div>
-    <div class="navigation-links">
-        <a class="link" href="{% url 'tube:post_list' %}">목록</a>
-        {% if user == post.author %}
-          
-            <a class="link" href="{% url 'tube:post_delete' post.pk %}">삭제</a>
-        {% endif %}
-    </div>
+    
+  
+</div>
+    <script>
+        function toggleForm(id) {
+            var form = document.getElementById('form-' + id);
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        } 
+    </script>
 </body>
 </html>

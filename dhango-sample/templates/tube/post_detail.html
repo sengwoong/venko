@@ -49,6 +49,13 @@
             border-radius: 4px;
         }
 
+
+        .blog-section,
+        .new-blog-section {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+        }
         .submit-btn:hover {
             background-color: #45a049;
         }
@@ -66,6 +73,26 @@
         {% if post.thumb_image %}
             <img src="{{ post.thumb_image.url }}" controls></img>
         {% endif %}
+
+        <div class="blog-section">
+            <h3>게시물보기</h3>
+            <ul class="blog-list">
+                <ul class="blog-list">
+                    {% for content in post.postcontents.all %}
+                        <li>Order: {{ content.order }}</li>
+                        {% if content.file_upload %}
+                            <li>파일 업로드: <img src="{{ content.file_upload.url }}" alt="{{ content.file_upload.name }}"> </li>
+                        {% endif %}
+                        {% if content.content %}
+                            <li>내용: {{ content.content }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                
+            </ul>
+            
+        </div>
+
         <div class="tags-section">
             <h3>태그</h3>
             <ul class="tags-list">
@@ -118,8 +145,9 @@
     <div class="navigation-links">
         <a class="link" href="{% url 'tube:post_list' %}">목록</a>
         {% if user == post.author %}
-            <a class="link" href="{% url 'tube:post_edit' post.pk %}">수정</a>
-            <a class="link" href="{% url 'tube:post_delete' post.pk %}">삭제</a>
+            <a class="link" href="{% url 'tube:post_create_detail' post.pk %}">수정</a>
+            {% comment %} <a class="link" href="{% url 'tube:post_delete' post.pk %}">삭제</a> {% endcomment %}
+            <a class="link" href="{% url 'tube:post_fine' post.pk %}">처리상태변경</a>
         {% endif %}
     </div>
 </body>

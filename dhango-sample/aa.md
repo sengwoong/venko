@@ -24,3 +24,5 @@ SingleObjectMixin: 단일 객체에 대한 상세 정보를 제공하는 뷰에�
 ContextMixin: 컨텍스트 데이터를 뷰에 추가하는 메서드를 제공합니다.
 TemplateResponseMixin: 템플릿을 사용하여 응답을 생성하는 메서드를 제공합니다.
 RedirectView: 뷰를 다른 URL로 리다이렉트하는 기능을 제공합니다.
+
+sqlite3 db.sqlite3      

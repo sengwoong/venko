@@ -75,7 +75,8 @@
     <div class="container">
         <h1>Post List</h1>
         <!-- 검색 기능 추가 -->
-        <form action="{% url 'tube:post_list' %}" method="GET">
+        <form action="{% url 'tube:history_list' %}" method="GET">
+
             <select name="category">
                 <option value="" {% if not request.GET.category %}selected{% endif %}>전체</option>
                 <option value="bug" {% if request.GET.category == "bug" %}selected{% endif %}>버그</option>
@@ -83,22 +84,23 @@
                 <option value="help" {% if request.GET.category == "help" %}selected{% endif %}>도움</option>
                 <option value="rescue" {% if request.GET.category == "rescue" %}selected{% endif %}>구조</option>
             </select>
+         
             <input type="text" name="q" value="{{ request.GET.q }}">
-            <input type="text" name="selecttag" value="{{ request.GET.tag }}" placeholder="태그를 입력하세요">
             <input type="submit" value="검색">
+
         </form>
         <ul>
-            {% for post in post_list %}
+            {% for post in post_history_list %}
             <li>
-                <a href="{% url 'tube:post_detail' post.pk %}">
+                <a href="{% url 'tube:post_historydetail' post.pk %}">
                     {{ post.title }}
                 </a>
             </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'tube:post_create' %}">업로드</a>
-    </br>
-        <a href="{% url 'tube:history_list' %}" class="completed-link">완료된 목록으로 이동</a>
+        <a href="{% url 'tube:post_list' %}" class="completed-link">진행중인 목록으로 이동</a>
+       
+        
     </div>
 </body>
 

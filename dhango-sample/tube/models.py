@@ -4,23 +4,28 @@ from django.conf import settings
 
 
 class Post(models.Model):
-
+    CATEGORY_CHOICES = [
+        ('bug', '버그'),
+        ('quest', '퀘스트'),
+        ('help', '도움'),
+        ('rescue', '구조'),
+    ]
+ 
     post_contents = models.ManyToManyField('PostContent', related_name='posts', blank=True)
 
 
-    tags = models.ManyToManyField('Tag', blank=True, related_name='tags' , db_index=True)
+    tags = models.ManyToManyField('Tag', blank=True, related_name='tags' ,db_index=True)
 
     title = models.CharField(max_length=100, db_index=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    category = models.CharField(max_length=50, default='bug', null=False)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='bug', null=False)
+
     #작성자
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts_written')
-    #너꼭읽어
-    read_author = models.ForeignKey(settings.AUTH_USER_MODEL, 
-                                    on_delete=models.CASCADE, related_name='posts_read')
+  
     
 
     view_count = models.PositiveIntegerField(default=0)
@@ -61,6 +66,8 @@ class PostContent(models.Model):
     order = models.IntegerField()
     file_upload = models.FileField(upload_to='tube/files/%Y/%m/%d/', blank=True, null=True)
     content = models.TextField(blank=True, null=True)
+    front_idx =  models.TextField(blank=True, null=True)
+    back_idx =  models.TextField(blank=True, null=True)
     
     
 
@@ -70,7 +77,7 @@ class PostContent(models.Model):
 #단 인설트하면 해당 레디스는 지워야한다.
 class Tag(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='posttags', db_index=True)
-    tag_name = models.CharField(max_length=50, unique=True)
+    tag_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.tag_name
@@ -85,26 +92,16 @@ class Tag(models.Model):
 
 
 
-class ClearPost(models.Model):
+class PostHistory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post_contents = models.TextField()
-    category = models.CharField(max_length=50, default='bug', null=False)
-    tags = models.CharField(max_length=255, blank=True)
+    category = models.CharField(max_length=50, default='bug', null=False , db_index=True)
+    tags = models.TextField()
     title = models.CharField(max_length=100, db_index=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='clear_posts_written')
-    read_author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='clear_posts_read')
     view_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
 
-    def get_custom_tags_list(self):
-        if self.custom_tags:
-            return [tag.strip() for tag in self.custom_tags.split(',')]
-        return []
-
-    def get_post_contents_list(self):
-        if self.post_contents:
-            return [content.strip() for content in self.post_contents.split(',')]
-        return []
