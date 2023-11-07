@@ -145,6 +145,7 @@
  <br>
 <br>
 이 로직을 설계할 때는 유연성과 모듈화가 주요 고려 사항이었으며, 특히 카프카를 사용할 때는 인설트 부분만 삭제하면 쉽게 구현할 수 있도록 만들었습니다.
+또한 업데이트는 페이지 단위가 아닌 컴포넌트 단위로 발생하였던 것 또한 이유 중 하나였습니다.
  <br><br><br>
 장점: <br>
 모듈화: 함수를 분리함으로써 코드를 모듈화하여 유지 보수 및 관리를 용이하게 할 수 있습니다. <br>
@@ -166,38 +167,45 @@
 | profile_change/ | post_file_update | profile_change | 사용자 프로필 정보를 업데이트하는 페이지입니다. |
 | profile_change/pass/ | change_password | profile_change_pass | 사용자 비밀번호를 변경하는 페이지입니다. |
 
-블로그 리스트
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122688&authkey=%21AJtpFQyXH8m2OQw&width=641&height=609" width="641" height="609" />
-블로그생성 및 컨텐츠 작성
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122689&authkey=%21AHxHN4ykWHCuZb0&width=722&height=351" width="722" height="351" />
-블로그 검색 기능
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122691&authkey=%21AOGIZH69ERBj9bk&width=713&height=433" width="713" height="433" />
-블로그 내용
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122685&authkey=%21AGRin2bITWBEvpE&width=1345&height=573" width="1345" height="573" />
-블로그 이미지 두개이상 포스트
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122686&authkey=%21ALI_Bww27A_ndDc&width=604&height=651" width="604" height="651" />
-수정기능
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122690&authkey=%21ANYBgLa_2m0T38M&width=617&height=517" width="617" height="517" />
 
+블로그 프로젝트 화면 
 
-히스토리 페이지 리스트
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122684&authkey=%21AAdiZBvUJhwzUnw&width=626&height=503" width="626" height="503" />
+### 블로그 리스트
+![블로그 리스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122688&authkey=%21AJtpFQyXH8m2OQw&width=641&height=609)
 
-히스토리 페이지 블로그 (삭제 가능)
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122692&authkey=%21APKuS8vs_OEC68g&width=713&height=559" width="713" height="559" />
+### 블로그생성 및 컨텐츠 작성
+![블로그생성 및 컨텐츠 작성](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122689&authkey=%21AHxHN4ykWHCuZb0&width=722&height=351)
 
-메인페이지
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122695&authkey=%21AEGSYXgzxwMB82I&width=560&height=365" width="560" height="365" />
- <br><br><br>
-프로필 페이지
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122696&authkey=%21AIoZ3CU2n3gdlfc&width=774&height=496" width="774" height="496" />
- <br><br><br>
-로그인
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122697&authkey=%21AHAU93OpFDxSe1g&width=742&height=223" width="742" height="223" />
+### 블로그 검색 기능
+![블로그 검색 기능](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122691&authkey=%21AOGIZH69ERBj9bk&width=713&height=433)
 
-유저정보수정
+### 블로그 내용
+![블로그 내용](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122685&authkey=%21AGRin2bITWBEvpE&width=1345&height=573)
 
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122698&authkey=%21AOVXoZEty75YWMc&width=1293&height=636" width="1293" height="636" />
-비밀번호 변경
-<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122699&authkey=%21ANjE63ccAUVp1Pc&width=1310&height=543" width="1310" height="543" />
+### 블로그 이미지 두개이상 포스트
+![블로그 이미지 두개이상 포스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122686&authkey=%21ALI_Bww27A_ndDc&width=604&height=651)
+
+### 수정기능
+![수정기능](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122690&authkey=%21ANYBgLa_2m0T38M&width=617&height=517)
+
+### 히스토리 페이지 리스트
+![히스토리 페이지 리스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122684&authkey=%21AAdiZBvUJhwzUnw&width=626&height=503)
+
+### 히스토리 페이지 블로그 (삭제 가능)
+![히스토리 페이지 블로그 (삭제 가능)](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122692&authkey=%21APKuS8vs_OEC68g&width=713&height=559)
+
+### 메인페이지
+![메인페이지](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122695&authkey=%21AEGSYXgzxwMB82I&width=560&height=365)
+
+### 프로필 페이지
+![프로필 페이지](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122696&authkey=%21AIoZ3CU2n3gdlfc&width=774&height=496)
+
+### 로그인
+![로그인](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122697&authkey=%21AHAU93OpFDxSe1g&width=742&height=223)
+
+### 유저정보수정
+![유저정보수정](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122698&authkey=%21AOVXoZEty75YWMc&width=1293&height=636)
+
+### 비밀번호 변경
+![비밀번호 변경](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122699&authkey=%21ANjE63ccAUVp1Pc&width=1310&height=543)
 
