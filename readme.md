@@ -282,3 +282,48 @@ graph lookup 형태<br>
 단순히 배열에서 셀렉트와 딜리트를 한꺼번에 처리할 수 있는 선택지가 없어지는 것이다.<br>
 그래서 필자는 부모 키 + 자손 키를 삽입하여 한 번에 자손을 전부 선택하고 지우는 것이 확장성 있고 좋은 아키텍처라고 생각하였다.<br>
 만일 시스템이 확장된다면 몽고디비의 graph lookup을 사용하면 좋을 것 같다.<br>
+
+```
+data = {
+    46: {'Front': None, 'Back': '48,49', 'Context': '46wagawg', 'Author': '<CustomUser: asdasd>'},
+    47: {'Front': None, 'Back': None, 'Context': '47awegweag', 'Author': '<CustomUser: asdasd>'},
+    48: {'Front': '46', 'Back': None, 'Context': '48awegwage', 'Author': '<CustomUser: asdasd>'},
+    49: {'Front': '46', 'Back': '50', 'Context': '49awegaweg', 'Author': '<CustomUser: asdasd>'},
+    50: {'Front': '49', 'Back': None, 'Context': '50ㅁㅈㅎㅁㅈㄷㅎ', 'Author': '<CustomUser: asdasd>'}
+}
+
+
+
+def extract_author_name(author):
+    author_string =str(author)
+    author_string = author_string.replace(" ", "")
+    return author_string.replace(" ", "")
+
+
+
+def print_structure(key, data):
+    node = {
+        "id": key,
+        "Context": data[key]['Context'],
+        "Author":extract_author_name( data[key]['Author']),
+        "replies": []
+    }
+    if data[key]['Back'] is not None:
+        print(key)
+        back_values = data[key]['Back'].split(',')
+        for back in back_values:
+            node["replies"].append(print_structure(int(back), data))
+    return node
+
+final_result = [print_structure(key, data) for key, value in data.items() if value['Front'] is None]
+print(final_result)
+
+
+for comment in final_result:
+    print(f"Replies for comment with id {comment['id']}:")
+    for reply in comment['replies']:
+        print(reply)
+    print('\n')
+
+
+```
