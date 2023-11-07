@@ -1,50 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Create Post</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+    <!-- Add Bootstrap CSS CDN link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            margin-top: 20px;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <!-- Add Tailwind CSS CDN link -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <form method="post">
-        {% csrf_token %}
-        <h2>Create a New Post</h2>
 
-        <h3>Add Post</h3>
+<body class="bg-gray-200 p-20">
+    <form class="max-w-md mx-auto bg-white p-8 rounded" method="post">
+        {% csrf_token %}
+        <h2 class="text-2xl text-center font-bold mb-6">Create a New Post</h2>
+
+        <h3 class="mt-4">Add Post</h3>
         {{ post_form.as_p }}
-        <button type="submit">Create Post</button>
+        <button type="submit" class="mt-6 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Create Post</button>
     </form>
 </body>
+
 </html>

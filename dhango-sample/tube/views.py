@@ -211,7 +211,13 @@ class PostHistoryDetailView(LoginRequiredMixin,DetailView):
         context['comment_form'] = CommentForm()
         post_contents = self.object.post_contents.strip('[]') if self.object.post_contents else ''
         tags = self.object.tags.strip('[]') if self.object.tags else ''
-    
+        img = self.object.images
+
+        img_urls = [image.image.url for image in img.all()]
+
+
+        print("img_urls")
+        print(img_urls)
         post_contents_list = [item.strip() for item in post_contents.split(',') if item.strip()]
         tags_list = [item.strip() for item in tags.split(',') if item.strip()]
         
@@ -222,7 +228,8 @@ class PostHistoryDetailView(LoginRequiredMixin,DetailView):
                 order = parts[0]
                 content = ":".join(parts[1:])
                 
-                formatted_post_contents_list.append({'order': order, 'content': content,})
+                print(img)
+                formatted_post_contents_list.append({'order': order, 'content': content, 'img':img})
 
 
 
@@ -238,6 +245,7 @@ class PostHistoryDetailView(LoginRequiredMixin,DetailView):
         }
         print("comments")
         print(comments)
+        context['img_urls'] = img_urls
 
 
         final_result = [print_structure(key, comments) for key, value in comments.items() if value['Front'] is None]
@@ -419,14 +427,13 @@ def add_post(request, pk):
             comment.author = request.user
             if 'image' in request.FILES:
                 image = request.FILES['image']
-                image_path = default_storage.save(settings.MEDIA_ROOT / image.name, image)
+               
              
-                comment.file_upload = image_path
+                comment.file_upload = image
 
                 # print("image")
                 # print(image)
-                print("image_path")
-                print(image_path)
+               
             else:
                 image_path = None
             comment.save()

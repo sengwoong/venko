@@ -5,144 +5,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Detail</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 
-        .post-detail {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            
-          }
-        li {
-            list-style-type: none;
-            
-          }
-        .tags-list,
-        .comments-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .navigation-links {
-            margin-top: 20px;
-        }
-
-        .link {
-            display: inline-block;
-            margin-right: 20px;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .comment-form {
-            margin-top: 20px;
-        }
-
-        .submit-btn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-
-        .blog-section,
-        .new-blog-section {
-            width: 50%;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 <body>
-    <div class="post-detail">
-        <h1>{{ object.title }}</h1>
-        <p>작성자: {{ object.author.username }}</p>
-        <p>작성일: {{ object.created_at }}</p>
-        <p>조회수: {{ object.view_count }}</p>
-      
-        <!-- ... previous HTML content ... -->
-        <div class="blog-section">
-            <h3>게시물보기</h3>
-            <ul class="blog-list">
+    <div class="container mx-auto px-4">
+        <div class="py-8">
+            <h1 class="text-4xl font-bold">{{ object.title }}</h1>
+            <p class="text-lg">작성자: {{ object.author.username }}</p>
+            <p class="text-lg">작성일: {{ object.created_at }}</p>
+            <p class="text-lg">조회수: {{ object.view_count }}</p>
+          
+            <!-- ... previous HTML content ... -->
+            <ul class="list-disc ml-8">
                 {% for content in post_contents_list %}
                     <li>Order: {{ content.order }}, 내용: {{ content.content }}</li>
+                    <div class="my-4">
+                        <strong>이미지:</strong>
+                    </div>
+                    <div class="flex flex-wrap">
+                        {% for img_url in img_urls %}
+                            <img class="m-2" src="{{ img_url }}" alt="Image" style="height:300px; width:300px;">
+                        {% endfor %}
+                    </div>
                 {% endfor %}
             </ul>
+
+            <div class="tags-section mt-8">
+                <h3 class="text-2xl font-semibold">태그</h3>
+                <ul class="list-disc ml-8">
+                    {% for tag in tags_list %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- ... rest of the HTML content ... -->
         </div>
-        
-
-<div class="tags-section">
-    <h3>태그</h3>
-    <ul class="tags-list">
-        {% for tag in tags_list %}
-            <li>{{ tag }}</li>
-        {% endfor %}
-    </ul>
-</div>
-<!-- ... rest of the HTML content ... -->
-
-
-
-
-
-
-
-
-
-
-
-{% for comment in comments_hierarchy %}
-    <p>댓글: {{ comment.Context }}</p>
-    <p>작성자: {{ comment.Author }}</p>
-    {% if comment.replies %}
-        <!-- 대댓글이 있다면 대댓글 목록을 보여줌 -->
-        <ul>
-            {% for reply in comment.replies %}
-                <li>
-                    <p>대댓글: {{ reply.Context }}</p>
-                    <p>작성자: {{ reply.Author }}</p>
-                    {% if reply.replies %}
-                        <!-- 대댓글에 대댓글이 있다면 대댓글 목록을 보여줌 -->
-                        <ul>
-                            {% for sub_reply in reply.replies %}
+        <div class="mt-8">
+            {% for comment in comments_hierarchy %}
+                <div class="bg-white shadow rounded-lg p-4 mb-4">
+                    <p class="text-xl font-semibold">댓글: {{ comment.Context }}</p>
+                    <p class="text-lg">작성자: {{ comment.Author }}</p>
+                    {% if comment.replies %}
+                        <ul class="ml-8">
+                            {% for reply in comment.replies %}
                                 <li>
-                                    <p>대대댓글: {{ sub_reply.Context }}</p>
-                                    <p>작성자: {{ sub_reply.Author }}</p>
-                                    <!-- 필요한 경우 더 깊은 수준의 대댓글 처리 -->
+                                    <p class="text-lg font-semibold">대댓글: {{ reply.Context }}</p>
+                                    <p class="text-lg">작성자: {{ reply.Author }}</p>
+                                    {% if reply.replies %}
+                                        <ul class="ml-8">
+                                            {% for sub_reply in reply.replies %}
+                                                <li>
+                                                    <p class="text-lg font-semibold">대대댓글: {{ sub_reply.Context }}</p>
+                                                    <p class="text-lg">작성자: {{ sub_reply.Author }}</p>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     {% endif %}
-                </li>
+                </div>
             {% endfor %}
-        </ul>
-    {% endif %}
-{% endfor %}
-
-
-
-    <div class="navigation-links">
-        <a class="link" href="{% url 'tube:post_list' %}">목록</a>
-        {% if user == object.author %}
-        <a class="link" href="{% url 'tube:post_delete_history' object.pk %}">삭제</a>
-    {% endif %}
-    
-   
+        </div>
+        <div class="mt-8">
+            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{% url 'tube:post_list' %}">목록</a>
+            {% if user == object.author %}
+                <a class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" href="{% url 'tube:post_delete_history' object.pk %}">삭제</a>
+            {% endif %}
+        </div>
     </div>
+    <!-- Bootstrap JS CDN -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

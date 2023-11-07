@@ -2,120 +2,37 @@
 <html>
 
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 60%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            margin-top: 50px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #3498db;
-        }
-
-        form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        select,
-        input[type="text"],
-        input[type="submit"] {
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        a {
-            text-decoration: none;
-            color: #3498db;
-        }
-
-        .completed-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .completed-link:hover {
-            background-color: #45a049;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-          }
-        li {
-            list-style-type: none;
-            padding: 0;
-          }
-          
-
-        .completed-link:active {
-            background-color: #3e8e41;
-        }
-    </style>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container">
-        <h1>Post List</h1>
+<body class="bg-gray-200">
+    <div class="container mx-auto bg-white p-8 my-10 shadow-lg rounded" style="width: 60%;">
+        <h1 class="text-center text-blue-500 text-4xl font-bold mb-6">Post List</h1>
         <!-- 검색 기능 추가 -->
-        <form action="{% url 'tube:history_list' %}" method="GET">
-
-            <select name="category">
+        <form action="{% url 'tube:history_list' %}" method="GET" class="flex justify-center items-center mb-4">
+            <select name="category" class="p-2 mr-2 rounded border border-gray-300">
                 <option value="" {% if not request.GET.category %}selected{% endif %}>전체</option>
                 <option value="bug" {% if request.GET.category == "bug" %}selected{% endif %}>버그</option>
                 <option value="quest" {% if request.GET.category == "quest" %}selected{% endif %}>퀘스트</option>
                 <option value="help" {% if request.GET.category == "help" %}selected{% endif %}>도움</option>
                 <option value="rescue" {% if request.GET.category == "rescue" %}selected{% endif %}>구조</option>
             </select>
-         
-            <input type="text" name="q" value="{{ request.GET.q }}">
-            <input type="submit" value="검색">
-
+            <input type="text" name="q" value="{{ request.GET.q }}" class="p-2 mr-2 rounded border border-gray-300">
+            <input type="submit" value="검색" class="p-2 bg-blue-500 hover:bg-blue-700 text-white rounded">
         </form>
         <ul>
             {% for post in post_history_list %}
-            <li>
-                <a href="{% url 'tube:post_historydetail' post.pk %}">
+            <li class="p-4 border-b border-gray-300">
+                <a href="{% url 'tube:post_historydetail' post.pk %}" class="text-blue-500 hover:underline">
                     {{ post.title }}
                 </a>
             </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'tube:post_list' %}" class="completed-link">진행중인 목록으로 이동</a>
-       
-        
+        <a href="{% url 'tube:post_list' %}" class="block text-center text-white bg-green-500 hover:bg-green-700 rounded p-2 my-2">진행중인 목록으로 이동</a>
     </div>
 </body>
 

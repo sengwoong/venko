@@ -1,226 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Detail</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .comment-form {
-            max-width: 300px; /* 원하는 너비로 조정하세요 */
-        }
-    
-        .comment-form textarea {
-            width: 100%; /* 폼의 너비를 100%로 설정하여 부모 요소에 맞추세요 */
-            max-width: 100%; /* 최대 너비를 부모 요소에 맞추세요 */
-            height: 50px; /* 원하는 높이로 조정하세요 */
-        }
-    
-        .comment-form .submit-btn {
-            display: block; /* 블록 레벨 요소로 설정하여 최대 너비를 차지하도록 하세요 */
-            width: 100%; /* 버튼의 너비를 100%로 설정하여 부모 요소에 맞추세요 */
-            max-width: 100%; /* 최대 너비를 부모 요소에 맞추세요 */
-        }
-        .post-detail {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .tags-list,
-        .comments-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .navigation-links {
-            margin-top: 20px;
-        }
-
-        .link {
-            display: inline-block;
-            margin-right: 20px;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .comment-form {
-            margin-top: 20px;
-        }
-
-        .submit-btn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-
-
-        .blog-section,
-        .new-blog-section {
-            width: 50%;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-        ul {
-            list-style-type: none;
-            
-          }
-        li {
-            list-style-type: none;
-            
-          }
-    </style>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="post-detail">
-        <h1>{{ post.title }}</h1>
-        
-        <p>작성자: {{ post.author }}</p>
-        <p>작성일: {{ post.created_at }}</p>
-        <p>조회수: {{ post.view_count }}</p>
+
+<body class="bg-gray-200">
+    <div class="max-w-2xl mx-auto p-8 my-10 bg-white shadow-lg rounded">
+        <h1 class="text-center text-blue-500 text-4xl font-bold mb-6">{{ post.title }}</h1>
+        <p class="mb-4">작성자: {{ post.author }}</p>
+        <p class="mb-4">작성일: {{ post.created_at }}</p>
+        <p class="mb-4">조회수: {{ post.view_count }}</p>
         {% if post.file_upload %}
-            <video src="{{ post.file_upload.url }}" controls></video>
+            <video src="{{ post.file_upload.url }}" controls class="w-full"></video>
         {% endif %}
         {% if post.thumb_image %}
-            <img src="{{ post.thumb_image.url }}" controls></img>
+            <img src="{{ post.thumb_image.url }}" class="w-32 h-32" alt="{{ post.title }}">
         {% endif %}
 
-        <div class="blog-section">
-            <h3>게시물보기</h3>
+        <div class="p-8 bg-white rounded mb-6">
+            <h3 class="text-2xl text-center mb-4">게시물보기</h3>
             <ul class="blog-list">
                 <ul class="blog-list">
                     {% for content in post.postcontents.all %}
-                        <li>Order: {{ content.order }}</li>
+                        <li class="mb-4">Order: {{ content.order }}</li>
                         {% if content.file_upload %}
-                            <li>파일 업로드: <img src="{{ content.file_upload.url }}" alt="{{ content.file_upload.name }}"> </li>
+                            <li class="mb-4">파일 업로드: <img src="{{ content.file_upload.url }}" class="w-32 h-32" alt="{{ content.file_upload.name }}"></li>
                         {% endif %}
                         {% if content.content %}
-                            <li>내용: {{ content.content }}</li>
+                            <li class="mb-4">내용: {{ content.content }}</li>
                         {% endif %}
                     {% endfor %}
                 </ul>
-                
             </ul>
-            
         </div>
 
-        <div class="tags-section">
-            <h3>태그</h3>
+        <div class="p-8 bg-white rounded mb-6">
+            <h3 class="text-2xl text-center mb-4">태그</h3>
             <ul class="tags-list">
                 {% for tag in post.tags.all %}
-         
-            
-                    <li>{{ tag }}  </li>
-                    <form class="delete-tag-form" action="{% url 'tube:tag_delete' post.pk tag.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="redirect_url" value="detail">
-                        <input type="submit" class="delete-tag-btn" value="삭제">
-                    </form>
-                    
-
-   
-
+                    <li>{{ tag }}</li>
                 {% endfor %}
             </ul>
+            <div class="add-tag-section">
+                <h3>태그 추가</h3>
+                <form class="tag-form" action="{% url 'tube:add_tag' post.pk %}" method="post">
+                    {% csrf_token %}
+                    <label for="tag_name">태그 이름:</label>
+                    <input type="text" id="tag_name" name="tag_name" class="border border-gray-300 rounded p-2">
+                    <input type="hidden" id="redirect_url" name="redirect_url" value="detail">
+                    <input class="bg-blue-500 hover:bg-blue-700 text-white rounded p-2" type="submit" value="추가">
+                </form>
+            </div>
         </div>
-        <div class="add-tag-section">
-            <h3>태그 추가</h3>
-            <form class="tag-form" action="{% url 'tube:add_tag' post.pk %}" method="post">
-                {% csrf_token %}
-                <label for="tag_name">태그 이름:</label>
-                <input type="text" id="tag_name" name="tag_name">
-                <input type="hidden" id="redirect_url" name="redirect_url" value="detail"> 
-                <input class="submit-btn" type="submit" value="추가">
-            </form>
-        </div>
-{% comment %}        
+
         <div class="comments-section">
             <h3>댓글</h3>
             <ul class="comments-list">
-                {% for comment in post.comments.all %}
-                    <li>{{ comment.message }}</li>
-                    <p>작성자: {{ comment.author }}</p>
-                    <p>작성일: {{ comment.updated_at }}</p>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="new-comment-section">
-            <h3>댓글 작성</h3>
-            <form class="comment-form" action="{% url 'tube:comment_new' post.pk %}" method="post">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <input class="submit-btn" type="submit" value="댓글 작성">
-            </form>
-        </div>
-    </div>  {% endcomment %}
-    
-
-
-    <div class="comments-section">
-        <h3>댓글</h3>
-        <ul class="comments-list">
-            {% for comment in comments_hierarchy %}
-                <li>
-                    댓글:{{ comment.Context }}
-                    <p>작성자: {{ comment.Author }}</p>
-                    {% if user.is_authenticated and user.username == comment.Author %}
-                    <!-- 수정 버튼 추가 -->
-                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
-                        {% csrf_token %}
-                        <input type="text" name="new_message" value="{{ comment.Context }}">
-                        <input type="submit" value="수정">
-                    </form>
-                    <!-- 삭제 버튼 추가 -->
-                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk comment.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="삭제">
-                    </form>
-                    {% endif %}
-                    <!-- 대댓글 목록 -->
-                    {% if comment.replies %}
-                        <ul class="child-comments-list">
-                            {% for reply in comment.replies %}
-                                <li>
-                                    대댓글:{{ reply.Context }}
-                                    <p>작성자: {{ reply.Author }}</p>
-                                    <!-- 대댓글 수정 및 삭제 버튼 -->
-                                    {% if user.is_authenticated and user.username == reply.Author %}
-                                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="text" name="new_message" value="{{ reply.Context }}">
-                                        <input type="submit" value="수정">
-                                    </form>
-                                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk reply.id %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="submit" value="삭제">
-                                    </form>
-                                    {% endif %}
-                                    <p>대대댓글 작성하기</p>
-                                    <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk reply.id %}" method="post">
-                                        {% csrf_token %}
-                                        {{ comment_form.as_p }}
-                                        <input class="submit-btn" type="submit" value="대대댓글 작성">
-                                    </form>
-                                    <!-- 대대댓글 목록 -->
-                                    
+                {% for comment in comments_hierarchy %}
+                    <li>
+                        댓글:{{ comment.Context }}
+                        <p>작성자: {{ comment.Author }}</p>
+                        {% if user.is_authenticated and user.username == comment.Author %}
+                        <!-- 수정 버튼 추가 -->
+                        <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="new_message" value="{{ comment.Context }}">
+                            <input type="submit" value="수정">
+                        </form>
+                        <!-- 삭제 버튼 추가 -->
+                        <form class="delete-form" action="{% url 'tube:comment_delete' post.pk comment.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="삭제">
+                        </form>
+                        {% endif %}
+                        <!-- 대댓글 목록 -->
+                        {% if comment.replies %}
+                            <ul class="child-comments-list">
+                                {% for reply in comment.replies %}
+                                    <li>
+                                        대댓글:{{ reply.Context }}
+                                        <p>작성자: {{ reply.Author }}</p>
+                                        <!-- 대댓글 수정 및 삭제 버튼 -->
+                                        {% if user.is_authenticated and user.username == reply.Author %}
+                                        <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="text" name="new_message" value="{{ reply.Context }}">
+                                            <input type="submit" value="수정">
+                                        </form>
+                                        <form class="delete-form" action="{% url 'tube:comment_delete' post.pk reply.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" value="삭제">
+                                        </form>
+                                        {% endif %}
+                                        <p>대대댓글 작성하기</p>
+                                        <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk reply.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="text" name="new_message" value="{{ reply.Context }}">
+                                            <input type="submit" value="대대댓글 작성">
+                                        </form>
+                                        <!-- 대대댓글 목록 -->
                                         <ul class="sub-child-comments-list">
-                                              
-                                            
-                                                    
                                             {% for sub_reply in reply.replies %}
-
                                                 <li>
                                                     대대댓글:{{ sub_reply.Context }}
                                                     <p>작성자: {{ sub_reply.Author }}</p>
@@ -237,79 +119,62 @@
                                                     </form>
                                                     {% endif %}
                                                     <!-- 대대댓글 작성 폼 -->
-                                                    
-                                                    
-                                                    
+                                                    <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk sub_reply.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="new_message" value="{{ sub_reply.Context }}">
+                                                        <input type="submit" value="대대댓글 작성">
+                                                    </form>
                                                     <!-- 추가적인 대대댓글 목록 -->
-                                                    {% if sub_reply.replies %}
-                                                        <ul class="sub-sub-child-comments-list">
-                                                            {% for sub_sub_reply in sub_reply.replies %}
-                                                                <li>
-                                                                    {{ sub_sub_reply.Context }}
-                                                                    <p>작성자: {{ sub_sub_reply.Author }}</p>
-                                                                    <!-- 대대댓글 수정 및 삭제 버튼 -->
-                                                                    {% if user.is_authenticated and user.username == sub_sub_reply.Author %}
-                                                                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
-                                                                        {% csrf_token %}
-                                                                        <input type="text" name="new_message" value="{{ sub_sub_reply.Context }}">
-                                                                        <input type="submit" value="수정">
-                                                                    </form>
-                                                                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk sub_sub_reply.id %}" method="post">
-                                                                        {% csrf_token %}
-                                                                        <input type="submit" value="삭제">
-                                                                    </form>
-                                                                    {% endif %}
-                                                                </li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    {% endif %}
+                                                    <ul class="sub-sub-child-comments-list">
+                                                        {% for sub_sub_reply in sub_reply.replies %}
+                                                            <li>
+                                                                {{ sub_sub_reply.Context }}
+                                                                <p>작성자: {{ sub_sub_reply.Author }}</p>
+                                                                <!-- 대대댓글 수정 및 삭제 버튼 -->
+                                                                {% if user.is_authenticated and user.username == sub_sub_reply.Author %}
+                                                                <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <input type="text" name="new_message" value="{{ sub_sub_reply.Context }}">
+                                                                    <input type="submit" value="수정">
+                                                                </form>
+                                                                <form class="delete-form" action="{% url 'tube:comment_delete' post.pk sub_sub_reply.id %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <input type="submit" value="삭제">
+                                                                </form>
+                                                                {% endif %}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
                                                 </li>
                                             {% endfor %}
                                         </ul>
-                                    
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <!-- 대댓글 작성 폼 -->
-                    {% if user.is_authenticated %}
-                    <p>대댓글 작성하기</p>
-                    <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk comment.id %}" method="post">
-                        {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <input class="submit-btn" type="submit" value="대댓글 작성">
-                    </form>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="new-comment-section">
+            <h3>댓글 작성</h3>
+            <form class="comment-form" action="{% url 'tube:comment_new' post.pk %}" method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <input class="bg-blue-500 hover:bg-blue-700 text-white rounded p-2" type="submit" value="댓글 작성">
+            </form>
+        </div>
+
+        <div class="navigation-links mt-6 flex justify-center">
+            <a class="link mr-4" href="{% url 'tube:post_list' %}">목록</a>
+            {% if user == post.author %}
+                <a class="link mr-4" href="{% url 'tube:post_create_detail' post.pk %}">수정</a>
+             
+                <a class="link" href="{% url 'tube:post_fine' post.pk %}">처리상태변경</a>
+            {% endif %}
+        </div>
     </div>
-    
-    <div class="new-comment-section">
-        <h3>댓글 작성</h3>
-        <form class="comment-form" action="{% url 'tube:comment_new' post.pk %}" method="post">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <input class="submit-btn" type="submit" value="댓글 작성">
-        </form>
-    </div>
-    
-    
-
-
-
-
-    <div class="navigation-links">
-        <a class="link" href="{% url 'tube:post_list' %}">목록</a>
-        {% if user == post.author %}
-            <a class="link" href="{% url 'tube:post_create_detail' post.pk %}">수정</a>
-            {% comment %} <a class="link" href="{% url 'tube:post_delete' post.pk %}">삭제</a> {% endcomment %}
-            <a class="link" href="{% url 'tube:post_fine' post.pk %}">처리상태변경</a>
-        {% endif %}
-    </div>
-
-
-
 </body>
 
 </html>

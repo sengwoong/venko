@@ -2,103 +2,37 @@
 <html>
 
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 60%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            margin-top: 50px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        select,
-        input[type="text"],
-        input[type="submit"] {
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        a {
-            text-decoration: none;
-            color: #3498db;
-        }
-
-        .completed-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .completed-link:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Post List</h1>
+    <div class="container mx-auto p-8 bg-gray-100 my-10 shadow-lg rounded">
+        <h1 class="text-4xl font-bold text-center mb-6">Post List</h1>
         <!-- 검색 기능 추가 -->
-        <form action="{% url 'tube:post_list' %}" method="GET">
-            <select name="category">
+        <form action="{% url 'tube:post_list' %}" method="GET" class="flex justify-center items-center mb-4">
+            <select name="category" class="p-2 mr-2 rounded border border-gray-300">
                 <option value="" {% if not request.GET.category %}selected{% endif %}>전체</option>
                 <option value="bug" {% if request.GET.category == "bug" %}selected{% endif %}>버그</option>
                 <option value="quest" {% if request.GET.category == "quest" %}selected{% endif %}>퀘스트</option>
                 <option value="help" {% if request.GET.category == "help" %}selected{% endif %}>도움</option>
                 <option value="rescue" {% if request.GET.category == "rescue" %}selected{% endif %}>구조</option>
             </select>
-            <input type="text" name="q" value="{{ request.GET.q }}">
-            <input type="text" name="selecttag" value="{{ request.GET.tag }}" placeholder="태그를 입력하세요">
-            <input type="submit" value="검색">
+            <input type="text" name="q" value="{{ request.GET.q }}" class="p-2 mr-2 rounded border border-gray-300">
+            <input type="text" name="selecttag" value="{{ request.GET.tag }}" placeholder="태그를 입력하세요" class="p-2 mr-2 rounded border border-gray-300">
+            <input type="submit" value="검색" class="p-2 bg-blue-500 hover:bg-blue-700 text-white rounded">
         </form>
         <ul>
             {% for post in post_list %}
-            <li>
-                <a href="{% url 'tube:post_detail' post.pk %}">
+            <li class="p-4 border-b border-gray-300">
+                <a href="{% url 'tube:post_detail' post.pk %}" class="text-blue-500 hover:underline">
                     {{ post.title }}
                 </a>
             </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'tube:post_create' %}">업로드</a>
-    </br>
-        <a href="{% url 'tube:history_list' %}" class="completed-link">완료된 목록으로 이동</a>
+        <a href="{% url 'tube:post_create' %}" class="block text-center text-blue-500 hover:text-blue-700 my-2">업로드</a>
+        <a href="{% url 'tube:history_list' %}" class="block text-center bg-green-500 hover:bg-green-700 text-white rounded p-2 my-2">완료된 목록으로 이동</a>
     </div>
 </body>
 

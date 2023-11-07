@@ -63,7 +63,7 @@ class Comment(models.Model):
 class PostContent(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postcontents', db_index=True)
     order = models.IntegerField()
-    file_upload = models.TextField(blank=True, null=True)
+    file_upload = models.ImageField(upload_to = "media/", null=True, blank=True)
     content = models.TextField(blank=True, null=True)
 
     
@@ -100,7 +100,13 @@ class PostHistory(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='clear_posts_written')
     view_count = models.PositiveIntegerField(default=0)
     post_comments = models.TextField(default='')
-
+    images = models.ManyToManyField('Image', related_name='posts')
     def __str__(self):
         return self.title
 
+class Image(models.Model):
+    post = models.ForeignKey(PostHistory, on_delete=models.CASCADE, related_name='hisimg')
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
+
+    def __str__(self):
+        return self.image.url
