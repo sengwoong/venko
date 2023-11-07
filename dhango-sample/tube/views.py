@@ -1,4 +1,5 @@
 # views.py
+from tutorialdjango.settings import MEDIA_ROOT
 from tube.af import print_structure
 from django.db.models import Prefetch
 import json
@@ -18,7 +19,9 @@ from django.urls import reverse_lazy , reverse
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
-
+from django.core.files.storage import default_storage
+from pathlib import Path
+from django.conf import settings
 
 from django.db.models import Q
 def blog_select_method(qs, q, category, selecttag):
@@ -101,7 +104,7 @@ class PostCreateDetailView(LoginRequiredMixin, DetailView):
     success_url = reverse_lazy('tube:post_list')
     template_name = 'tube/form_detail.html'
 
-
+   
     
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
@@ -127,10 +130,19 @@ class PostCreateDetailView(LoginRequiredMixin, DetailView):
             tag.post = post
             tag.save()
 
-        comment_form = PostContentForm(self.request.POST)
+        comment_form = PostContentForm(self.request.POST, self.request.FILES)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
+            
+            if 'image' in self.request.FILES:
+                image = self.request.FILES['image']
+                image_path = default_storage.save(settings.MEDIA_ROOT / image.name, image)
+                comment.file_upload = image_path
+            print("image")
+
+            print(image)
+            print(image_path)
             comment.save()
 
         return redirect(self.success_url)
@@ -209,7 +221,8 @@ class PostHistoryDetailView(LoginRequiredMixin,DetailView):
                 parts = item.split(':')
                 order = parts[0]
                 content = ":".join(parts[1:])
-                formatted_post_contents_list.append({'order': order, 'content': content})
+                
+                formatted_post_contents_list.append({'order': order, 'content': content,})
 
 
 
@@ -390,13 +403,32 @@ def add_post(request, pk):
         form = PostContentForm(request.POST)
 
         url = request.POST.get('redirect_url')
-        print("url")
-        print(url)
+        # print("url")
+        # print(url)
+        # print("request.FILES")
+        # print(request.FILES)
+        # print("request.FILES")
+        
+        
+
+
         if form.is_valid():
             print("valid")
             comment = form.save(commit=False) # commit=False는 DB에 저장하지 않고 객체만 반환
             comment.post = post
             comment.author = request.user
+            if 'image' in request.FILES:
+                image = request.FILES['image']
+                image_path = default_storage.save(settings.MEDIA_ROOT / image.name, image)
+             
+                comment.file_upload = image_path
+
+                # print("image")
+                # print(image)
+                print("image_path")
+                print(image_path)
+            else:
+                image_path = None
             comment.save()
         if url == "creat":  # 수정된 부분
             return redirect('tube:post_create_detail', pk)
@@ -421,14 +453,19 @@ def post_edit(request, pk):
         # POST 요청 처리
         content_id = request.POST.get('content_id')  # 수정할 PostContent의 ID를 가져옵니다
         new_content = request.POST.get('new_content')  # 새로운 content 데이터를 가져옵니다
-        print("content_id")
-        print(content_id)
+        if request.FILES['image']:
+            image = request.FILES['image']  # 새로운 content 데이터를 가져옵니다
+            image_path = default_storage.save(Path(MEDIA_ROOT) / image.name, image)
+
+        print("image_path")
+        print(image_path)
         print(new_content)
         if content_id and new_content:
             print(content_id)
             post_content = PostContent.objects.get(pk=content_id) 
             print(post_content) # 해당하는 PostContent 객체를 가져옵니다
             post_content.content = new_content  # content를 업데이트합니다
+            post_content.file_upload = image_path
             post_content.save()  # 변경된 내용을 저장합니다
         return redirect('tube:post_create_detail', pk=post.pk)
 

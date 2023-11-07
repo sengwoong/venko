@@ -63,7 +63,7 @@ class Comment(models.Model):
 class PostContent(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postcontents', db_index=True)
     order = models.IntegerField()
-    file_upload = models.FileField(upload_to='tube/files/%Y/%m/%d/', blank=True, null=True)
+    file_upload = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
 
     

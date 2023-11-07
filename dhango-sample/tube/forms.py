@@ -19,5 +19,5 @@ class TagForm(forms.ModelForm):
 class PostContentForm(forms.ModelForm):
     class Meta:
         model = PostContent
-        fields = ['content','file_upload','order']
+        fields = ['content','order']
 
