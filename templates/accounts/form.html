@@ -53,14 +53,14 @@
 {% comment %} <script type="text/javascript">
     $(document).ready(function() {
         // Set initial values
-        var 부서 = $("#id_부서").val();
+        let 부서 = $("#id_부서").val();
         if (부서 === "as부서") {
             $("#id_직급").html('<option value="현장직">현장직</option><option value="관리직">관리직</option>');
         }
 
         // Change event listener for department field
         $("#id_부서").change(function() {
-            var 부서 = $(this).val();
+            let 부서 = $(this).val();
             if (부서 === "as부서") {
                 $("#id_직급").html('<option value="현장직">현장직</option><option value="관리직">관리직</option>');
             } else if (부서 === "cs부서") {
