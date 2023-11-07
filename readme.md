@@ -145,7 +145,7 @@
  <br>
 <br>
 이 로직을 설계할 때는 유연성과 모듈화가 주요 고려 사항이었으며, 특히 카프카를 사용할 때는 인설트 부분만 삭제하면 쉽게 구현할 수 있도록 만들었습니다.
- <br>
+ <br><br><br>
 장점: <br>
 모듈화: 함수를 분리함으로써 코드를 모듈화하여 유지 보수 및 관리를 용이하게 할 수 있습니다. <br>
 가독성: 각 컴포넌트가 명확한 역할을 가지므로 코드를 이해하기 쉽고 가독성이 좋아집니다.<br>
@@ -185,3 +185,19 @@
 
 히스토리 페이지 블로그 (삭제 가능)
 <img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122692&authkey=%21APKuS8vs_OEC68g&width=713&height=559" width="713" height="559" />
+
+메인페이지
+<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122695&authkey=%21AEGSYXgzxwMB82I&width=560&height=365" width="560" height="365" />
+ <br><br><br>
+프로필 페이지
+<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122696&authkey=%21AIoZ3CU2n3gdlfc&width=774&height=496" width="774" height="496" />
+ <br><br><br>
+로그인
+<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122697&authkey=%21AHAU93OpFDxSe1g&width=742&height=223" width="742" height="223" />
+
+유저정보수정
+
+<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122698&authkey=%21AOVXoZEty75YWMc&width=1293&height=636" width="1293" height="636" />
+비밀번호 변경
+<img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122699&authkey=%21ANjE63ccAUVp1Pc&width=1310&height=543" width="1310" height="543" />
+
