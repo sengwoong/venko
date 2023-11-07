@@ -168,7 +168,7 @@
 | profile_change/pass/ | change_password | profile_change_pass | 사용자 비밀번호를 변경하는 페이지입니다. |
 
 
-블로그 프로젝트 화면 
+## 블로그 프로젝트 화면 
 
 ### 블로그 리스트
 ![블로그 리스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122688&authkey=%21AJtpFQyXH8m2OQw&width=641&height=609)
@@ -208,4 +208,76 @@
 
 ### 비밀번호 변경
 ![비밀번호 변경](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122699&authkey=%21ANjE63ccAUVp1Pc&width=1310&height=543)
+
+<br><br>
+---
+## 고민
+### 셀렉트 최적화 post 와 postHistory
+![스크린샷 2023-11-08 오전 2 19 04](https://github.com/sengwoong/venko/assets/92924243/8aca3083-ef6d-4155-84a4-0bb592db0f4e)
+<br><br><br>
+
+id로 연결되어 있는 Post는 디비튜닝이 어렵다.
+<br>
+삽입이 많이 일어나는 로직이라 모듈화해서 조인하는 것이 맞는데,처음에는 id 값으로  스칼라 hash 힌트를 사용하여 아이디가 같음을 표현하여 효율적이게 조인하려 하였다.
+<br>
+하지만 그렇다고 하여도, 성능이 문제가 있을 것으로 판단하였다. 몽고디비를 사용하여 분리하는 것 또한 방법 이라고 생각하였으나, 현재 프로젝트는 sqllite 라는 디비기술이 확정된 상태였다.
+<br>
+그래서 마지막으로 "인데싱을 방해하며 수정이 불가능 한데 조인되는 로직"을 비즈니스 단계에서 생각해 보니 그러한 것들을 "postHistory"로 만들면 되겠다고 생각하였다.
+postHistory란 Post에서 완료된 함수를 가지고 있는 모델이다. post에서 delect를 하면 자동으로 postHistory로 넘기기 위하여 다음과 같은 코드를 사용하였다.
+아래 코드는 per_delete로 지워지기 전에 적절하게 로직을 넣을 수 있었다.<br><br>
+```
+
+@receiver(pre_delete, sender=Post)
+def pre_delete_post(sender, instance, **kwargs):
+    print("postsender")
+
+    post_contents = []
+    for content in instance.postcontents.all():
+        content_description = f"{content.order}: {content.content}"
+        if content.file_upload:
+            content_description += f", {content.file_upload.path}"
+        post_contents.append(content_description)
+    print(post_contents)
+
+    commentAllid = {}
+    for comment in instance.comments.all():
+        commentAllid[comment.id] = {
+            "Front": comment.front_idx,
+            "Back": comment.back_idx,
+            "Context": comment.message,
+            "Author": comment.author.username
+        }
+
+    print("commentFrontid")
+    print(commentAllid)
+
+    tags = ", ".join([tag.tag_name for tag in instance.tags.all()])
+
+    post_history = PostHistory.objects.create(
+        post_contents=json.dumps(post_contents),
+        category=instance.category,
+        title=instance.title,
+        author=instance.author,
+        view_count=instance.view_count,
+        tags=tags,
+        post_comments=json.dumps(commentAllid),
+    )
+    for content in instance.postcontents.all():
+        if content.file_upload:
+            image_instance = Image.objects.create(
+            image=content.file_upload,  # 이미지 파일 자체를 저장
+            post=post_history
+        )
+        post_history.images.add(image_instance)
+
+```
+<br><br><br>
+---
+## 기능
+<br>
+비밀번호 재생성
+<br><br><br>
+대댓글
+<br><br><br>
+html 권한인증
 
