@@ -23,15 +23,16 @@
             <ul class="list-disc ml-8">
                 {% for content in post_contents_list %}
                     <li>Order: {{ content.order }}, 내용: {{ content.content }}</li>
-                    <div class="my-4">
-                        <strong>이미지:</strong>
-                    </div>
-                    <div class="flex flex-wrap">
-                        {% for img_url in img_urls %}
-                            <img class="m-2" src="{{ img_url }}" alt="Image" style="height:300px; width:300px;">
-                        {% endfor %}
-                    </div>
+                    
                 {% endfor %}
+                <div class="my-4">
+                    <strong>이미지:</strong>
+                </div>
+                <div class="flex flex-wrap">
+                    {% for img_url in img_urls %}
+                        <img class="m-2" src="{{ img_url }}" alt="Image" style="height:300px; width:300px;">
+                    {% endfor %}
+                </div>
             </ul>
 
             <div class="tags-section mt-8">

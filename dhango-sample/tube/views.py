@@ -212,7 +212,9 @@ class PostHistoryDetailView(LoginRequiredMixin,DetailView):
         post_contents = self.object.post_contents.strip('[]') if self.object.post_contents else ''
         tags = self.object.tags.strip('[]') if self.object.tags else ''
         img = self.object.images
-
+        print("img")
+        print("img")
+        print(img)
         img_urls = [image.image.url for image in img.all()]
 
 
