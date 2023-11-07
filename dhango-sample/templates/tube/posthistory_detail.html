@@ -90,17 +90,83 @@
 <!-- ... rest of the HTML content ... -->
 
 
-        <div class="comments-section">
-            <h3>댓글</h3>
-            <ul class="comments-list">
-                {% for comment in object.post_comments.all %}
-                    <li>{{ comment.message }}</li>
-                    <p>작성자: {{ comment.author.username }}</p>
-                    <p>작성일: {{ comment.updated_at }}</p>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
+
+
+
+
+
+
+
+
+
+
+<div class="comments-section">
+    <h3>댓글</h3>
+    <ul class="comments-list">
+        {{comments_hierarchy.items}}
+        {% for comment_id, comment_data in comments_hierarchy.items %}
+            <li>
+                댓글: {{ comment_data.Context }}
+                <p>작성자: {{ comment_data.Author }}</p>
+                
+                <!-- 대댓글 목록 -->
+                {% if comment_data.replies %}
+                    <ul class="child-comments-list">
+                        {% for reply_id, reply_data in comment_data.replies.items %}
+                            <li>
+                                대댓글: {{ reply_data.Context }}
+                                <p>작성자: {{ reply_data.Author }}</p>
+                                <!-- 대댓글 수정 및 삭제 버튼 -->
+                                
+                                <!-- 대대댓글 목록 -->
+                                {% if reply_data.replies %}
+                                    <ul class="sub-child-comments-list">
+                                        {% for sub_reply_id, sub_reply_data in reply_data.replies.items %}
+                                            <li>
+                                                대대댓글: {{ sub_reply_data.Context }}
+                                                <p>작성자: {{ sub_reply_data.Author }}</p>
+                                                <!-- 대대댓글 수정 및 삭제 버튼 -->
+                                                
+                                                <!-- 대대댓글 작성 폼 -->
+                                                
+                                                
+                                                
+                                                <!-- 추가적인 대대댓글 목록 -->
+                                                {% if sub_reply_data.replies %}
+                                                    <ul class="sub-sub-child-comments-list">
+                                                        {% for sub_sub_reply_id, sub_sub_reply_data in sub_reply_data.replies.items %}
+                                                            <li>
+                                                                {{ sub_sub_reply_data.Context }}
+                                                                <p>작성자: {{ sub_sub_reply_data.Author }}</p>
+                                                               
+                                                                    
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <!-- 대댓글 작성 폼 -->
+                {% if user.is_authenticated %}
+            
+              
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
+
+
     <div class="navigation-links">
         <a class="link" href="{% url 'tube:post_list' %}">목록</a>
         {% if user == object.author %}

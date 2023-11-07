@@ -11,7 +11,21 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
-
+        .comment-form {
+            max-width: 300px; /* 원하는 너비로 조정하세요 */
+        }
+    
+        .comment-form textarea {
+            width: 100%; /* 폼의 너비를 100%로 설정하여 부모 요소에 맞추세요 */
+            max-width: 100%; /* 최대 너비를 부모 요소에 맞추세요 */
+            height: 50px; /* 원하는 높이로 조정하세요 */
+        }
+    
+        .comment-form .submit-btn {
+            display: block; /* 블록 레벨 요소로 설정하여 최대 너비를 차지하도록 하세요 */
+            width: 100%; /* 버튼의 너비를 100%로 설정하여 부모 요소에 맞추세요 */
+            max-width: 100%; /* 최대 너비를 부모 요소에 맞추세요 */
+        }
         .post-detail {
             background-color: #fff;
             padding: 20px;
@@ -64,6 +78,7 @@
 <body>
     <div class="post-detail">
         <h1>{{ post.title }}</h1>
+        
         <p>작성자: {{ post.author }}</p>
         <p>작성일: {{ post.created_at }}</p>
         <p>조회수: {{ post.view_count }}</p>
@@ -122,7 +137,7 @@
                 <input class="submit-btn" type="submit" value="추가">
             </form>
         </div>
-        
+{% comment %}        
         <div class="comments-section">
             <h3>댓글</h3>
             <ul class="comments-list">
@@ -141,7 +156,141 @@
                 <input class="submit-btn" type="submit" value="댓글 작성">
             </form>
         </div>
+    </div>  {% endcomment %}
+    
+
+
+    <div class="comments-section">
+        <h3>댓글</h3>
+        <ul class="comments-list">
+            {% for comment in comments_hierarchy %}
+                <li>
+                    댓글:{{ comment.Context }}
+                    <p>작성자: {{ comment.Author }}</p>
+                    {% if user.is_authenticated and user.username == comment.Author %}
+                    <!-- 수정 버튼 추가 -->
+                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="new_message" value="{{ comment.Context }}">
+                        <input type="submit" value="수정">
+                    </form>
+                    <!-- 삭제 버튼 추가 -->
+                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk comment.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="삭제">
+                    </form>
+                    {% endif %}
+                    <!-- 대댓글 목록 -->
+                    {% if comment.replies %}
+                        <ul class="child-comments-list">
+                            {% for reply in comment.replies %}
+                                <li>
+                                    대댓글:{{ reply.Context }}
+                                    <p>작성자: {{ reply.Author }}</p>
+                                    <!-- 대댓글 수정 및 삭제 버튼 -->
+                                    {% if user.is_authenticated and user.username == reply.Author %}
+                                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="text" name="new_message" value="{{ reply.Context }}">
+                                        <input type="submit" value="수정">
+                                    </form>
+                                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk reply.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" value="삭제">
+                                    </form>
+                                    {% endif %}
+                                    <p>대대댓글 작성하기</p>
+                                    <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk reply.id %}" method="post">
+                                        {% csrf_token %}
+                                        {{ comment_form.as_p }}
+                                        <input class="submit-btn" type="submit" value="대대댓글 작성">
+                                    </form>
+                                    <!-- 대대댓글 목록 -->
+                                    
+                                        <ul class="sub-child-comments-list">
+                                                {{reply}}
+                                            
+                                                    
+                                            {% for sub_reply in reply.replies %}
+
+                                                <li>
+                                                    대대댓글:{{ sub_reply.Context }}
+                                                    <p>작성자: {{ sub_reply.Author }}</p>
+                                                    <!-- 대대댓글 수정 및 삭제 버튼 -->
+                                                    {% if user.is_authenticated and user.username == sub_reply.Author %}
+                                                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="new_message" value="{{ sub_reply.Context }}">
+                                                        <input type="submit" value="수정">
+                                                    </form>
+                                                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk sub_reply.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="submit" value="삭제">
+                                                    </form>
+                                                    {% endif %}
+                                                    <!-- 대대댓글 작성 폼 -->
+                                                    
+                                                    
+                                                    
+                                                    <!-- 추가적인 대대댓글 목록 -->
+                                                    {% if sub_reply.replies %}
+                                                        <ul class="sub-sub-child-comments-list">
+                                                            {% for sub_sub_reply in sub_reply.replies %}
+                                                                <li>
+                                                                    {{ sub_sub_reply.Context }}
+                                                                    <p>작성자: {{ sub_sub_reply.Author }}</p>
+                                                                    <!-- 대대댓글 수정 및 삭제 버튼 -->
+                                                                    {% if user.is_authenticated and user.username == sub_sub_reply.Author %}
+                                                                    <form class="edit-form" action="{% url 'tube:comment_edit' commentpk=comment.id pk=post.pk %}" method="post">
+                                                                        {% csrf_token %}
+                                                                        <input type="text" name="new_message" value="{{ sub_sub_reply.Context }}">
+                                                                        <input type="submit" value="수정">
+                                                                    </form>
+                                                                    <form class="delete-form" action="{% url 'tube:comment_delete' post.pk sub_sub_reply.id %}" method="post">
+                                                                        {% csrf_token %}
+                                                                        <input type="submit" value="삭제">
+                                                                    </form>
+                                                                    {% endif %}
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <!-- 대댓글 작성 폼 -->
+                    {% if user.is_authenticated %}
+                    <p>대댓글 작성하기</p>
+                    <form class="comment-form" action="{% url 'tube:comment_reply_new' post.pk comment.id %}" method="post">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <input class="submit-btn" type="submit" value="대댓글 작성">
+                    </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
+    
+    <div class="new-comment-section">
+        <h3>댓글 작성</h3>
+        <form class="comment-form" action="{% url 'tube:comment_new' post.pk %}" method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input class="submit-btn" type="submit" value="댓글 작성">
+        </form>
+    </div>
+    
+    
+
+
+
+
     <div class="navigation-links">
         <a class="link" href="{% url 'tube:post_list' %}">목록</a>
         {% if user == post.author %}
@@ -150,6 +299,9 @@
             <a class="link" href="{% url 'tube:post_fine' post.pk %}">처리상태변경</a>
         {% endif %}
     </div>
+
+
+
 </body>
 
 </html>
