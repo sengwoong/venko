@@ -174,7 +174,7 @@
 ![블로그생성 및 컨텐츠 작성](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122689&authkey=%21AHxHN4ykWHCuZb0&width=722&height=351)
 
 ### 블로그 검색 기능
-![블로그 검색 기능](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122691&authkey=%21AOGIZH69ERBj9bk&width=713&height=433)
+![블로그 검색 기능](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122691&authkey=%21AOGIZH69ERBj9bk&width=713&height=433)<br>
 카테고리< 테그 = 타이틀 
 ### 블로그 내용
 ![블로그 내용](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122685&authkey=%21AGRin2bITWBEvpE&width=1345&height=573)
