@@ -293,7 +293,27 @@ for comment in final_result:
 ```
 
 <br><br><br>
+---
 
+---
+## 트러블 슈팅<br>
+get_object 가 여러번 발생하는 경우가 생겼다 그리고 새로고침하면 어뷰징으로 뷰수를 올리는 것이 가능했다.<br>
+그래서 아래와 같이 캐쉬를 사용하여서 여러번 불러도 카운터가 오르지 않게 수정하였다. <br>
+<br>
+```
+def get_object(self, queryset=None):
+        print(queryset)
+        print(self)
+        pk = self.kwargs.get('pk')
+        
+        post = get_object_or_404(PostHistory, pk=pk)
+        # Increment the view_count and save
+        post.view_count += 1
+        post.save()
+        return post
+```
+
+---
 ## 블로그 프로젝트 화면 
 
 ### 블로그 리스트
@@ -340,21 +360,4 @@ for comment in final_result:
 
 <br><br>
 
----
-## 트러블 슈팅<br>
-get_object 가 여러번 발생하는 경우가 생겼다 그리고 새로고침하면 어뷰징으로 뷰수를 올리는 것이 가능했다.<br>
-그래서 아래와 같이 캐쉬를 사용하여서 여러번 불러도 카운터가 오르지 않게 수정하였다. <br>
-<br>
-```
-def get_object(self, queryset=None):
-        print(queryset)
-        print(self)
-        pk = self.kwargs.get('pk')
-        
-        post = get_object_or_404(PostHistory, pk=pk)
-        # Increment the view_count and save
-        post.view_count += 1
-        post.save()
-        return post
-```
 
