@@ -318,6 +318,8 @@ for comment in final_result:
 ### 히스토리 페이지 리스트
 ![히스토리 페이지 리스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122684&authkey=%21AAdiZBvUJhwzUnw&width=626&height=503)
 
+태그 와 타이틀 이너조인씨 성능문제 발생
+
 ### 히스토리 페이지 블로그 (삭제 가능)
 ![히스토리 페이지 블로그 (삭제 가능)](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122692&authkey=%21APKuS8vs_OEC68g&width=713&height=559)
 
