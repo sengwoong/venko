@@ -21,7 +21,7 @@
 # WBS 
 <br>
 
-![스크린샷 2023-11-08 오전 9 05 42](https://github.com/sengwoong/venko/assets/92924243/88a03c46-0ed2-4094-a674-bfbe62bd4766)<br>
+![스크린샷 2023-11-08 오전 9 15 18](https://github.com/sengwoong/venko/assets/92924243/52f4418e-506c-474f-8a7c-6e64f56b4b35)
 
 <br>
 # ERD
