@@ -359,5 +359,200 @@ def get_object(self, queryset=None):
 ![비밀번호 변경](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122699&authkey=%21ANjE63ccAUVp1Pc&width=1310&height=543)
 
 <br><br>
-
+.
+├── aa.md
+├── accounts
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── admin.cpython-311.pyc
+│   │   ├── apps.cpython-311.pyc
+│   │   ├── forms.cpython-311.pyc
+│   │   ├── models.cpython-311.pyc
+│   │   ├── urls.cpython-311.pyc
+│   │   └── views.cpython-311.pyc
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_auto_20231102_1123.py
+│   │   ├── 0003_auto_20231102_1132.py
+│   │   ├── 0004_alter_customuser_permission.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-311.pyc
+│   │       ├── 0002_auto_20231102_1123.cpython-311.pyc
+│   │       ├── 0003_auto_20231102_1132.cpython-311.pyc
+│   │       ├── 0004_alter_customuser_permission.cpython-311.pyc
+│   │       └── __init__.cpython-311.pyc
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── db.sqlite3
+├── home
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── admin.cpython-311.pyc
+│   │   ├── apps.cpython-311.pyc
+│   │   ├── models.cpython-311.pyc
+│   │   ├── urls.cpython-311.pyc
+│   │   └── views.cpython-311.pyc
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-311.pyc
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── manage.py
+├── media
+│   ├── awegawge.png
+│   ├── awegawge_DkwS91a.png
+│   ├── awegawge_ElESYrL.png
+│   ├── awegawge_KHP4SDR.png
+│   ├── awegawge_LlmCOoJ.png
+│   ├── awegawge_W96QVvr.png
+│   ├── awegawge_Xx5u6MS.png
+│   ├── media
+│   │   ├── 스크린샷_2023-11-07_오후_5.07.19.png
+│   │   ├── 스크린샷_2023-11-07_시간_07.16.50_2.png
+│   │   ├── 스크린샷_2023-11-07_시간_08.15.49_2.png
+│   │   ├── 스크린샷_2023-11-07_시간_08.15.49_2_Dh5Xl1s.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.06.35_1.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.06.35_2.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.06.35_2_JjNZuAN.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.11.56_2.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.11.56_2_1RETx63.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.11.56_2_DwW69IV.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.11.56_2_Q1gSRYJ.png
+│   │   ├── 스크린샷_2023-11-07_시간_09.11.56_2_m8PbEDc.png
+│   │   ├── 스크린샷_2023-11-07_시간_10.11.47_1.png
+│   │   └── 스크린샷_2023-11-07_시간_10.13.32_1.png
+│   ├── tube
+│   │   ├── files
+│   │   │   └── 2023
+│   │   │       └── 10
+│   │   │           └── 27
+│   │   │               └── 그림1.png
+│   │   └── images
+│   │       └── 2023
+│   │           └── 10
+│   │               ├── 26
+│   │               │   └── 그림1.png
+│   │               └── 27
+│   │                   └── 그림1.png
+│   ├── 스크린샷 2023-11-07 시간: 09.06.35 [2].png
+│   └── 스크린샷 2023-11-07 시간: 09.11.56 [1].png
+├── readme.md
+├── static
+│   └── media
+│       ├── 스크린샷 2023-11-07 시간: 08.15.49 [1].png
+│       ├── 스크린샷 2023-11-07 시간: 09.06.35 [2].png
+│       ├── 스크린샷 2023-11-07 시간: 09.11.56 [2].png
+│       └── 스크린샷 2023-11-07 시간: 10.11.47 [2].png
+├── templates
+│   ├── accounts
+│   │   ├── change_password.html
+│   │   ├── edit_profile.html
+│   │   ├── form.html
+│   │   └── profile.html
+│   ├── home
+│   │   └── index.html
+│   └── tube
+│       ├── form.html
+│       ├── form_detail.html
+│       ├── post_confirm_delete.html
+│       ├── post_detail.html
+│       ├── post_history_list.html
+│       ├── post_list.html
+│       └── posthistory_detail.html
+├── tube
+│   ├── Delect.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── admin.cpython-311.pyc
+│   │   ├── af.cpython-311.pyc
+│   │   ├── apps.cpython-311.pyc
+│   │   ├── forms.cpython-311.pyc
+│   │   ├── models.cpython-311.pyc
+│   │   ├── postHistory.cpython-311.pyc
+│   │   ├── urls.cpython-311.pyc
+│   │   └── views.cpython-311.pyc
+│   ├── admin.py
+│   ├── af.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_auto_20231102_1338.py
+│   │   ├── 0003_auto_20231102_1415.py
+│   │   ├── 0004_auto_20231102_1441.py
+│   │   ├── 0005_rename_name_tag_tag_name.py
+│   │   ├── 0006_auto_20231102_1536.py
+│   │   ├── 0007_auto_20231102_1650.py
+│   │   ├── 0008_auto_20231102_1651.py
+│   │   ├── 0009_auto_20231102_1813.py
+│   │   ├── 0010_auto_20231102_1840.py
+│   │   ├── 0011_post_post_contents.py
+│   │   ├── 0012_auto_20231102_1849.py
+│   │   ├── 0013_auto_20231102_1912.py
+│   │   ├── 0014_auto_20231102_1917.py
+│   │   ├── 0015_auto_20231102_2253.py
+│   │   ├── 0016_auto_20231106_1421.py
+│   │   ├── 0017_remove_post_read_author.py
+│   │   ├── 0018_alter_posthistory_tags.py
+│   │   ├── 0019_auto_20231107_0616.py
+│   │   ├── 0020_posthistory_post_comments.py
+│   │   ├── 0021_alter_postcontent_file_upload.py
+│   │   ├── 0022_alter_postcontent_file_upload.py
+│   │   ├── 0023_auto_20231107_1542.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-311.pyc
+│   │       ├── 0002_auto_20231102_1338.cpython-311.pyc
+│   │       ├── 0003_auto_20231102_1415.cpython-311.pyc
+│   │       ├── 0004_auto_20231102_1441.cpython-311.pyc
+│   │       ├── 0005_rename_name_tag_tag_name.cpython-311.pyc
+│   │       ├── 0006_auto_20231102_1536.cpython-311.pyc
+│   │       ├── 0007_auto_20231102_1650.cpython-311.pyc
+│   │       ├── 0008_auto_20231102_1651.cpython-311.pyc
+│   │       ├── 0009_auto_20231102_1813.cpython-311.pyc
+│   │       ├── 0010_auto_20231102_1840.cpython-311.pyc
+│   │       ├── 0011_post_post_contents.cpython-311.pyc
+│   │       ├── 0012_auto_20231102_1849.cpython-311.pyc
+│   │       ├── 0013_auto_20231102_1912.cpython-311.pyc
+│   │       ├── 0014_auto_20231102_1917.cpython-311.pyc
+│   │       ├── 0015_auto_20231102_2253.cpython-311.pyc
+│   │       ├── 0016_auto_20231106_1421.cpython-311.pyc
+│   │       ├── 0017_remove_post_read_author.cpython-311.pyc
+│   │       ├── 0018_alter_posthistory_tags.cpython-311.pyc
+│   │       ├── 0019_auto_20231107_0616.cpython-311.pyc
+│   │       ├── 0020_posthistory_post_comments.cpython-311.pyc
+│   │       ├── 0021_alter_postcontent_file_upload.cpython-311.pyc
+│   │       ├── 0022_alter_postcontent_file_upload.cpython-311.pyc
+│   │       ├── 0023_auto_20231107_1542.cpython-311.pyc
+│   │       └── __init__.cpython-311.pyc
+│   ├── models.py
+│   ├── postHistory.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+└── tutorialdjango
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-311.pyc
+    │   ├── settings.cpython-311.pyc
+    │   ├── urls.cpython-311.pyc
+    │   └── wsgi.cpython-311.pyc
+    ├── asgi.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
 
