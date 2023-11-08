@@ -20,7 +20,10 @@
 - 사용자는 채팅이나 댓글을 통해 다른 사용자와 소통할 수 있어야 합니다.
 # WBS 
 <br>
-![스크린샷 2023-11-08 오전 9 05 42](https://github.com/sengwoong/venko/assets/92924243/88a03c46-0ed2-4094-a674-bfbe62bd4766)<br><br>
+
+![스크린샷 2023-11-08 오전 9 05 42](https://github.com/sengwoong/venko/assets/92924243/88a03c46-0ed2-4094-a674-bfbe62bd4766)<br>
+
+<br>
 # ERD
 
 <img src="https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122683&authkey=%21ALDgiVxAOIGl1Nc&width=803&height=554" width="803" height="554" />
