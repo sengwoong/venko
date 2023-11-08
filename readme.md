@@ -312,7 +312,8 @@ for comment in final_result:
 ![블로그 이미지 두개이상 포스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122686&authkey=%21ALI_Bww27A_ndDc&width=604&height=651)
 
 ### 수정기능
-![수정기능](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122690&authkey=%21ANYBgLa_2m0T38M&width=617&height=517)
+![스크린샷 2023-11-08 오전 9 26 38](https://github.com/sengwoong/venko/assets/92924243/a74fc282-5d90-4701-ad2e-fdb597ddaf54)
+![스크린샷 2023-11-08 오전 9 26 52](https://github.com/sengwoong/venko/assets/92924243/ef40b82f-170e-4172-b194-701b6ca0d269)
 
 ### 히스토리 페이지 리스트
 ![히스토리 페이지 리스트](https://onedrive.live.com/embed?resid=9F97455DC8826EA7%2122684&authkey=%21AAdiZBvUJhwzUnw&width=626&height=503)
