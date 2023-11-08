@@ -3,6 +3,7 @@ from tutorialdjango.settings import MEDIA_ROOT
 from tube.af import print_structure
 from django.db.models import Prefetch
 import json
+from django.core.cache import cache
 # write는 로그인 해야만
 # update와 delete는 업로드한 사용자여야만
 from django.db.models import Subquery, OuterRef
@@ -190,12 +191,22 @@ class PostDetailView(LoginRequiredMixin,DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        post = get_object_or_404(Post, pk=pk)
+        post = cache.get(f"post_{pk}")
 
-        # view_count를 증가시키고 저장합니다.
-        post.view_count += 1
-        post.save()
-        print(post.__dict__)
+        if not post:
+            try:
+                post = get_object_or_404(Post, pk=pk)
+
+            # view_count를 증가시키고 저장합니다.
+                post.view_count += 1
+                post.save()
+
+            # Store the post in the cache with a unique key
+                cache.set(f"post_{pk}", post, timeout=1)
+
+            except Post.DoesNotExist:
+                raise Http404("Post does not exist in the database.")
+
         return post
 
  
